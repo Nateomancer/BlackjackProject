@@ -9,9 +9,15 @@ public enum Suit {
   Suit(String name) {
     this.name = name;
   }
+  
+  
 
   
-  //---toString---
+  public String getName() {
+	return name;
+}
+
+//---toString---
   @Override
   public String toString() {
     return name;

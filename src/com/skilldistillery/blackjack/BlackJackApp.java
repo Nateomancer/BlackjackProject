@@ -12,6 +12,17 @@ import com.skilldistillery.blackjack.cards.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//TODO CLEAN UP COMMENTS CODE
+//TODO AN OPTION TO PLAY AGAIN
+//TODO BETTER WAY TO CHECK HAND
+//TODO BETTER WAY TP CREATE A BLACK JACK HAND
+//TODO SHOW CARD NAME AND VALUE WHEN DRAWING A CARD
+//TODO SHOW PLAYERS ENTIRE HAND, WITH EACH CARD WITH NAME AND VALUE, AND HAND TOTAL
+//TODO BLACK JACK CONDITION=21 first turn
+//TODO TURN AMOUNT/ AMOUNT
+
+
 public class BlackJackApp {
 
 	// --INSTANCE VARIABLES---
@@ -28,6 +39,12 @@ public class BlackJackApp {
 	// Create Dealer and Player
 	private Dealer blackJackDealer = new Dealer(dealersHand, deck);
 	private Player blackJackPlayer = new Player(playersHand);
+
+	// handCheck
+	char handCheck;
+	
+	//boolean game win/lose condition
+	boolean gameover = false;
 
 	// Create scanner
 	private Scanner input = new Scanner(System.in);
@@ -88,13 +105,15 @@ public class BlackJackApp {
 		System.out.println("Want to play a game.... ");
 		System.out.println("");
 		firstTurn();
-		boolean gameover = false;
-		while (gameover != true) {
+		
+		do {
 			playersTurn();
 			dealersTurn();
 			gameConditions();
+		
+		}while (gameover != true);
 		}
-	}
+	
 
 	// GAME SET UP
 	public void firstTurn() {
@@ -111,23 +130,27 @@ public class BlackJackApp {
 		dealersHand.addCard(gameCard);
 
 		// Checks values
-		System.out.println("   ---ROUND 1---");
-		System.out.println("---Player's total---");
-		System.out.println(playersHand.getHandValue(playersHand));
+		// TODO PRINT CARDS IN HAND
+		System.out.println("         ---ROUND 1---");
+		System.out.println("     ---Player's total---");
+		// System.out.println(playersHand.getHandValue(playersHand));
+		getHandValue(handCheck = 'P');
 
-		System.out.println("*    *    *   *    *");
-		System.out.println("---Dealer's total---");
-		System.out.println(dealersHand.getHandValue(dealersHand));
+		
+		System.out.println("      ---Dealer's total---");
+		// System.out.println(dealersHand.getHandValue(dealersHand));
+		getHandValue(handCheck = 'D');
 		System.out.println("");
 	}
 
 	// PLAYERS TURN
 	public void playersTurn() {
+		// PRINT CARDS IN HAND
 
 		// Menu for players turn
 		// Player can hit, stay, check hand, or quit
 		char hitOrStay;
-		System.out.println("***PLAYERS TURN***");
+		System.out.println("---PLAYER'S TURN---");
 		System.out.println("Please enter A to Hit");
 		System.out.println("Please enter B to Stay");
 		System.out.println("Please enter C to See your " + "\ncurrent hand (Value)");
@@ -139,22 +162,33 @@ public class BlackJackApp {
 		case 'A':
 			gameCard = blackJackDealer.dealCard();
 			playersHand.addCard(gameCard);
+			System.out.println("");
+			System.out.println("---PLAYER'S TOTAL---");
+			System.out.println("Player Hits");
 			System.out.println("New Card: " + gameCard);
-			System.out.println("---Player's total---");
-			System.out.println(playersHand.getHandValue(playersHand)+"\n");
+			System.out.println("Player's new total: ");
+			//System.out.println(playersHand.getHandValue(playersHand));
+			getHandValue(handCheck = 'P');
+			System.out.println("");
 			break;
 		case 'B':
 			System.out.println("Player Has Chosen to Stay");
 			System.out.println("Chicken");
+			System.out.println("");
 			break;
 		case 'C':
 			// TODO Print Cards?
 			System.out.println("Players Current Total");
-			System.out.println(playersHand.getHandValue(playersHand)+"\n");
+			//System.out.println(playersHand.getHandValue(playersHand));
+			getHandValue(handCheck = 'P');
+			playersTurn();
+			System.out.println("");
 			break;
 		case 'Q':
 			System.out.println("Goodbye");
+			gameover=true;
 			input.close();
+			System.exit(0);
 			break;
 		default:
 			System.out.println("Invalid Option");
@@ -166,9 +200,11 @@ public class BlackJackApp {
 	// DEALERS TURN
 	public void dealersTurn() {
 
+		// TODO PRINT CARDS IN HAND
+
 		// get dealers current value
 		int dealersHandValue = dealersHand.getHandValue(dealersHand);
-		System.out.println("---DEALERS TURB---");
+		System.out.println("---DEALERS TURN---");
 		// Dealer Logic
 		// Dealer will hit if value is under 17
 		// Dealer will pass if over 17
@@ -176,54 +212,80 @@ public class BlackJackApp {
 			System.out.println("Dealer Hits");
 			gameCard = blackJackDealer.dealCard();
 			dealersHand.addCard(gameCard);
+			System.out.println("New Card: " + gameCard);
 			System.out.println("Dealers new total: ");
-			System.out.println(dealersHand.getHandValue(dealersHand)+"\n");
+			//System.out.println(dealersHand.getHandValue(dealersHand) + "\n");
+			getHandValue(handCheck = 'D');
+			System.out.println("");
 
 		} else if (dealersHandValue > 17) {
 			System.out.println("Dealer choses to pass");
-			//dealersHand.getHandValue(dealersHand);
+			System.out.println("");
+			// dealersHand.getHandValue(dealersHand);
 		} else
 			System.out.println("Something is wrong....DEALER LOGIC");
+			gameover = true;
+			System.out.println("");
 	}
 
 	// Method to check hand values for both player and dealer
-	public void getHandValue() {
-		dealersHand.getHandValue(dealersHand);
-		playersHand.getHandValue(playersHand);
+	public void getHandValue(char handCheck) {
+
+		if (handCheck == 'P') {
+			System.out.println(playersHand.getHandValue(playersHand));
+
+		} else if (handCheck == 'D') {
+			System.out.println(dealersHand.getHandValue(dealersHand));
+		} else {
+			System.out.println("Something happened....GET HAND TOTAL");
+			gameover = true;
+		}
 	}
 
 	// Check win conditions after every round
 	public boolean gameConditions() {
 
-		boolean gameover = true;
-
+		
 		int dealersTotal = dealersHand.getHandValue(dealersHand);
 		int playersTotal = playersHand.getHandValue(playersHand);
-
-		if ((dealersTotal < 21)&&(playersTotal<21)) {
+		
+		//GAME CONTINUES
+		//BOTH DEALER AND PLAYER ARE UNDER 21
+		if ((dealersTotal < 21) && (playersTotal < 21)) {
 			gameover = false;
 			return gameover;
-
+				
+		//DEALER IS OVER 21
+		//GAME ENDS DEALER LOSES
 		} else if (dealersTotal > 21) {
 			System.out.println("GAME OVER");
 			System.out.println("Dealer has lost...");
-			System.out.println("Dealers total: ");
-			System.out.println(dealersHand.getHandValue(dealersHand));
+			System.out.println("\nDealers total: ");
+			//System.out.println(dealersHand.getHandValue(dealersHand));
+			getHandValue(handCheck = 'D');
+			System.out.println("\nPlayer's total: ");
+			getHandValue(handCheck = 'P');
+			gameover = true;
 			return gameover;
-		}
-			else if(playersTotal>21) {
-				System.out.println("GAME OVER");
-				System.out.println("Player has lost...");
-				System.out.println("Player's total: ");
-				System.out.println(dealersHand.getHandValue(dealersHand));
-				System.out.println("You are banished to the shadow realm...");
-				return gameover;
-			}
-		 else {
+			//PLAYER IS OVER 21
+			//GAME ENDS PLAYER LOSES
+		} else if (playersTotal > 21) {
+			System.out.println("GAME OVER");
+			System.out.println("Player has lost...");
+			System.out.println("\nPlayer's total: ");
+			//System.out.println(playersHand.getHandValue(playersHand));
+			getHandValue(handCheck = 'P');
+			System.out.println("\nDealers total: ");
+			getHandValue(handCheck = 'D');
+			System.out.println("You are banished to the shadow realm...");
+			gameover = true;
+			return gameover;
+		} else {
 			System.out.println("Something happened... GAME CONDITIONS");
+			gameover = true;
 			return gameover;
 		}
-		
+
 	}
 
 }

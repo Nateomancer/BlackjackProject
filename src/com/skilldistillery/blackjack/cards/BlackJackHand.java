@@ -39,6 +39,10 @@ public class BlackJackHand extends Hand {
 		for (Card card : handValue.getCards()) {
 
 			int value = card.getValue();
+			String name=card.getName();
+//			System.out.println("---------------------------------");
+//			System.out.println("Card Name: "+name+ " Card Value: "+value);
+//			System.out.println("---------------------------------");
 			totalValue += card.getValue();
 
 			
@@ -47,6 +51,7 @@ public class BlackJackHand extends Hand {
 
 		}
 		return totalValue;
+		
 	}
 
 	// 21

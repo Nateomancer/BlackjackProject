@@ -49,9 +49,9 @@ public abstract class Hand {
 			int value = card.getValue();
 			totalValue += card.getValue();
 			
-			System.out.println("IN METHOD");
-			System.out.println("Card Value: "+value);
-			System.out.println("Cards Value: "+totalValue);
+//			System.out.println("IN METHOD");
+//			System.out.println("Card Value: "+value);
+//			System.out.println("Cards Value: "+totalValue);
 
 		}
 		return totalValue;

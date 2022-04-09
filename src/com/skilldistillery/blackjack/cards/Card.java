@@ -25,6 +25,9 @@ public class Card {
 	public int getValue() {
 		return rank.getValue();
 	}
+	public String getName() {
+		return suit.getName();
+	}
 
 	// --HASHCODE/EQUALS METHODS---
 	@Override
