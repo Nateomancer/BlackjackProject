@@ -25,14 +25,28 @@ public class BlackJackHand extends Hand {
 	}
 
 	// ---METHODS---
+	// Black Jack addCard to hand
+	public void addCard(Card drawnCard) {
+		cards.add(drawnCard);
+	}
 
-	// Inherited method from parent, Hand
-	@Override
-	public int getHandValue() {
+	// Get total value of hand
+	public int getHandValue(BlackJackHand handValue) {
 		// Iterate through cards in hand.
 		// Adding the total amount
+		// WORKS
+		int totalValue = 0;
+		for (Card card : handValue.getCards()) {
 
-		return 0;
+			int value = card.getValue();
+			totalValue += card.getValue();
+
+			
+//			System.out.println("Card Value: " + value);
+ 		    //System.out.println("HAND TOTAL: " + totalValue);
+
+		}
+		return totalValue;
 	}
 
 	// 21
@@ -46,5 +60,22 @@ public class BlackJackHand extends Hand {
 		return false;
 
 	}
+
+	public List<Card> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
+	}
+
+//Old inherited method from abstract parent class hand
+//abstract method get HandValue
+//??????????????
+//	@Override
+//	public int getHandValue() {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
 
 }

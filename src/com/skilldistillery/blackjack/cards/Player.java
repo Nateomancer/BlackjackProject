@@ -62,4 +62,6 @@ public class Player {
 	public void setCard(Card card) {
 		this.card = card;
 	}
+	
+	//---Methods---
 }

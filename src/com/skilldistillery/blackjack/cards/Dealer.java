@@ -3,8 +3,6 @@ package com.skilldistillery.blackjack.cards;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class Dealer {
 
 	// --DEALER ATTRIBUTES---
@@ -29,11 +27,10 @@ public class Dealer {
 	private Hand dealersHand;
 
 	// Dealer Deck for game
-	 private Deck dealersDeck;
+	private Deck dealersDeck;
 
 	// cards for game
 	private Card gameCard;
-
 
 	// ---Constructors---
 	// Default constructor
@@ -46,7 +43,7 @@ public class Dealer {
 
 		this.dealersHand = dealersHand;
 		this.dealersDeck = dealersDeck;
-		//this.gameCard = gameCard;
+		// this.gameCard = gameCard;
 	}
 
 	// ---Methods--
@@ -61,16 +58,25 @@ public class Dealer {
 
 	// draw cards
 	public Card dealCard() {
-		//List<Card> draw = new ArrayList<>();
-		
-		Card drawnCard=new Card();
-		 int totalValue=0;
-		//for (int i = 0; i < 2; i++) {
-			Card c = dealersDeck.dealCard();
-			totalValue= c.getValue();
-			return c;
+		// List<Card> draw = new ArrayList<>();
+		// Card drawnCard=new Card();
+		// int totalValue=0;
+		// for (int i = 0; i < 2; i++) {
+		Card c = dealersDeck.dealCard();
+		return c;
 	}
-	//---Getters and Setters---
+
+	// ---DEALER LOGIC---
+	public void dealersTurn() {
+		// Needs BlackJack Hand
+		// needs Card in hand
+		// Needs hand value
+		// If hand value is more than 17, pass
+		// If hand value is less that 17, hit
+
+	}
+
+	// ---Getters and Setters---
 	public Hand getDealersHand() {
 		return dealersHand;
 	}
@@ -87,7 +93,6 @@ public class Dealer {
 		this.dealersDeck = dealersDeck;
 	}
 
-
 	public Card getGameCard() {
 		return gameCard;
 	}
@@ -95,18 +100,23 @@ public class Dealer {
 	public void setGameCard(Card gameCard) {
 		this.gameCard = gameCard;
 	}
+
 	@Override
 	public String toString() {
-		return "Dealer's hand: "+ dealersHand + ", DealersDeck: " + dealersDeck + ", Game card" + gameCard;
+		return "Dealer's hand: " + dealersHand + ", DealersDeck: " + dealersDeck + ", Game card" + gameCard;
 	}
 
-	
-	
-	
-	// get the hand value of the dealer
-	public Hand HandValue() {
+//	public void getHandValue() {
+//		
+//		dealersHand.getHandValue(List <Card> cards);
+//	}
 
-		System.out.println(dealersHand.getHandValue());
-		return dealersHand;
-	}
+//	old method from abstract hand class
+// ???????????????????	
+//	// get the hand value of the dealer
+//	public Hand HandValue() {
+//
+//		System.out.println(dealersHand.getHandValue());
+//		return dealersHand;
+//	}
 }
