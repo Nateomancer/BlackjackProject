@@ -52,14 +52,14 @@ public class BlackJackApp {
 	private String itemName;
 	private String itemDescription;
 	private Items foundItem;
-	boolean playerFoundItem = false;
-	boolean playerFoundCrestOfMercury = false;
-	boolean playerFoundGamblingRecipetAndPictureOfMary = false;
-	boolean playerFoundOldManCoin = false;
-	boolean playerFoundPrisonerCoin = false;
-	boolean playerFoundSnakeCoin = false;
-	boolean playerCheated = false;
-	int playerCheatedTotal;
+	private boolean playerFoundItem = false;
+	private boolean playerFoundCrestOfMercury = false;
+ 	private boolean playerFoundGamblingRecipetAndPictureOfMary = false;
+	private boolean playerFoundOldManCoin = false;
+	private boolean playerFoundPrisonerCoin = false;
+	private boolean playerFoundSnakeCoin = false;
+	private boolean playerCheated = false;
+	private int playerCheatedTotal;
 	// Create deck
 	private Deck dealersDeck = new Deck();
 	// Creates dealers hand and players hand
@@ -553,15 +553,20 @@ public class BlackJackApp {
 			lookUnderTable();
 			break;
 		case 'E':
-			if (playerFoundItem = true) {
+			//check pocket
+			if (playerFoundItem ==true) {
 				System.out.println(foundItem.toString());
 				System.out.println("");
 				System.out.println("What is this? Why was it there...");
 				System.out.println("Maybe it's for something.\n");
-			} else
+			} else if (playerFoundItem==false){
 				System.out.println("You find nothing in your pocket.");
+			}else {
+				System.out.println("You find nothing in your pocket.");
+			}
 			break;
 		case 'Q':
+			playersTurn();
 			break;
 		default:
 			System.out.println("Invalid Option");
@@ -730,8 +735,7 @@ public class BlackJackApp {
 				Items gamblingRecipetAndPictureOfMary = new Items(itemName, itemDescription, itemNumber);
 				foundItem = gamblingRecipetAndPictureOfMary;
 				playerFoundItem = true;
-
-				playerFoundGamblingRecipetAndPictureOfMary = false;
+				playerFoundGamblingRecipetAndPictureOfMary = true;
 
 			} // player finds the Coin (Old Man)
 			else if (itemNumber > 52 && itemNumber <= 57) {
@@ -742,7 +746,7 @@ public class BlackJackApp {
 				Items coinOldMan = new Items(itemName, itemDescription, itemNumber);
 				foundItem = coinOldMan;
 				playerFoundItem = true;
-				playerFoundOldManCoin = false;
+				playerFoundOldManCoin = true;
 
 			} // player finds the Coin (Prisoner)
 			else if (itemNumber > 57 && itemNumber <= 62) {
@@ -754,7 +758,7 @@ public class BlackJackApp {
 				Items coinPrisoner = new Items(itemName, itemDescription, itemNumber);
 				foundItem = coinPrisoner;
 				playerFoundItem = true;
-				playerFoundPrisonerCoin = false;
+				playerFoundPrisonerCoin = true;
 
 				// gameItems.add(coinPrisoner);
 			} // player finds the Coin (Snake)
@@ -766,7 +770,7 @@ public class BlackJackApp {
 				Items coinSnake = new Items(itemName, itemDescription, itemNumber);
 				foundItem = coinSnake;
 				playerFoundItem = true;
-				playerFoundSnakeCoin = false;
+				playerFoundSnakeCoin = true;
 
 			}
 			// Player does't find anything
@@ -775,6 +779,7 @@ public class BlackJackApp {
 				System.out.println("Nothing...\n");
 				playerFoundItem = false;
 			}
+			//player has already found an item
 		} else if (playerFoundItem = true) {
 			System.out.println("You look under the table again...");
 			System.out.println("But there is nothing there.\n");
