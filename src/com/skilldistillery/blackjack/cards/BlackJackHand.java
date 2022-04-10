@@ -8,6 +8,7 @@ import java.util.List;
 public class BlackJackHand extends Hand {
 
 	// field variables
+	// list of cards
 	List<Card> cards = new ArrayList<>();
 
 	// ---CONSTRUCTORS---
@@ -39,20 +40,29 @@ public class BlackJackHand extends Hand {
 		for (Card card : handValue.getCards()) {
 
 			int value = card.getValue();
-			String name=card.getName();
-//			System.out.println("---------------------------------");
-//			System.out.println("Card Name: "+name+ " Card Value: "+value);
-//			System.out.println("---------------------------------");
 			totalValue += card.getValue();
-
-			
-//			System.out.println("Card Value: " + value);
- 		    //System.out.println("HAND TOTAL: " + totalValue);
 
 		}
 		return totalValue;
-		
+
 	}
+
+	// new method IGNORE FOR NOW
+//	public void getHandInfo(BlackJackHand handValue) {
+//		int totalValue = 0;
+//		for (Card card : handValue.getCards()) {
+//
+//			int value = card.getValue();
+//			String name = card.getName();
+//			System.out.println("---------------------------------");
+//			System.out.println("Card Name: " + name + " Card Value: " + value);
+//			totalValue += card.getValue();
+//		}
+//
+//		System.out.println("Hand Total: " + totalValue);
+//		System.out.println("---------------------------------");
+//
+//	}
 
 	// 21
 	public boolean isBlackjack() {
@@ -74,6 +84,10 @@ public class BlackJackHand extends Hand {
 		this.cards = cards;
 	}
 
+	@Override
+	public String toString() {
+		return "Cards in hand: " + cards;
+	}
 //Old inherited method from abstract parent class hand
 //abstract method get HandValue
 //??????????????

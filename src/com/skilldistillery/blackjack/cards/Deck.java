@@ -32,7 +32,6 @@ public class Deck {
 			}
 		}
 		// Shuffle the deck
-		// I added this
 		shuffleDeck(deck);
 		return deck;
 	}

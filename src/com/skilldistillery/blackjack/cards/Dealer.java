@@ -13,14 +13,6 @@ public class Dealer {
 	// ---Field variables---
 	private List<Card> cards;
 
-	// ----DEALER ACTIONS----
-	// dealer can get a deck of cards
-	// dealer can shuffle cards
-	// dealer can hit
-	// dealer can stay
-	// dealer can give player cards
-	// dealer can get value of their cards
-
 	// -----INSTANCES------
 	// instance of BlackJack Hand
 	// should it be hand??
