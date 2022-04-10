@@ -1,17 +1,17 @@
 package com.skilldistillery.blackjack;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 import java.util.Scanner;
-import com.skilldistillery.blackjack.cards.Hand;
+//import com.skilldistillery.blackjack.cards.Hand;
 import com.skilldistillery.blackjack.cards.Items;
 import com.skilldistillery.blackjack.cards.BlackJackHand;
 import com.skilldistillery.blackjack.cards.Dealer;
 import com.skilldistillery.blackjack.cards.Deck;
 import com.skilldistillery.blackjack.cards.Card;
 import com.skilldistillery.blackjack.cards.Player;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
 //---CORE PROGRAM FOR ASSIGNMENT---
 //TODO BUILD DECK
@@ -42,9 +42,9 @@ import java.util.List;
 
 public class BlackJackApp {
 
-	// Holds Items
-	// CHANGE LATER
-	// List<Items> gameItems = new ArrayList<>();
+	// handCheck
+	// DO I NEED???
+	private char handCheck;
 
 	// --INSTANCE VARIABLES---
 	private Card gameCard;
@@ -53,28 +53,29 @@ public class BlackJackApp {
 	private String itemDescription;
 	private Items foundItem;
 	boolean playerFoundItem = false;
-
-	// Create Deck
-	private Deck deck = new Deck();
-
-	// create hands
-	// dealers hand and players hand
+	boolean playerFoundCrestOfMercury = false;
+	boolean playerFoundGamblingRecipetAndPictureOfMary = false;
+	boolean playerFoundOldManCoin = false;
+	boolean playerFoundPrisonerCoin = false;
+	boolean playerFoundSnakeCoin = false;
+	boolean playerCheated = false;
+	int playerCheatedTotal;
+	// Create deck
+	private Deck dealersDeck = new Deck();
+	// Creates dealers hand and players hand
 	private BlackJackHand dealersHand = new BlackJackHand();
-	public BlackJackHand playersHand = new BlackJackHand();
-
+	private BlackJackHand playersHand = new BlackJackHand();
 	// Create Dealer and Player
-	private Dealer blackJackDealer = new Dealer(dealersHand, deck);
+	private Dealer blackJackDealer = new Dealer(dealersHand, dealersDeck);
 	private Player blackJackPlayer = new Player(playersHand);
-
-	// handCheck
-	private char handCheck;
-
-	// boolean game win/lose condition
+	// Boolean game win/lose condition
 	boolean gameover = false;
+	// Blackjack condition
 	boolean blackJack = false;
-
 	// Create scanner
 	private Scanner input = new Scanner(System.in);
+
+	// Secret Game
 
 	// ----------------MAIN METHOD-----------------
 	public static void main(String[] args) {
@@ -86,10 +87,16 @@ public class BlackJackApp {
 	// RUN METHOD
 	public void run() {
 
+		// Runs the game.
+		// 4 primary methods
+		// First turn
+		// Players turn
+		// Dealers Turn
+		// winLoseConditions
 		while (gameover == false) {
 
 			System.out.println("Do you want to player a game...\n");
-			firstTurn();
+			startGame();
 			if (gameover == false) {
 
 				playersTurn();
@@ -100,19 +107,20 @@ public class BlackJackApp {
 			}
 			if (blackJack == false) {
 
-				// check win conditions
-				gameConditions();
+				winLoseConditions();
 			}
 		}
 	}
 
-	// first turn
-	public void firstTurn() {
+	// Game Starts
+	// Dealer Sets up Game
+	// Deals Cards
+	public void startGame() {
 
 		// Dealer draws three cards
 		// Only dealer can draw cards from the deck
 
-		// First card to added to players hand
+		// First card is added to players hand
 		gameCard = blackJackDealer.dealCard();
 		playersHand.addCardToHand(gameCard);
 
@@ -124,6 +132,9 @@ public class BlackJackApp {
 		gameCard = blackJackDealer.dealCard();
 		playersHand.addCardToHand(gameCard);
 
+		// fourth card is drawn later, to simulate the dealers card being placed face
+		// down
+
 		// add to subgame class
 		System.out.println("Dealer Shuffles deck with a technique you can't quite understand...\n"
 				+ "They deal two cards, face up in front of you.\n"
@@ -131,8 +142,8 @@ public class BlackJackApp {
 				+ "You know something isn't right, but you somehow know the dealer isn't cheating...\n");
 
 		// CHECK FOR BLACK JACK WIN CONDITIONS
-		int playerFirstRoundTotal = playersHand.getHandValue(playersHand);
-		if (playerFirstRoundTotal == 21) {
+		int playersTotal = getHandTotal('P');
+		if (playersTotal == 21) {
 			System.out.println("Black Jack");
 			gameover = true;
 			blackJack = true;
@@ -142,20 +153,15 @@ public class BlackJackApp {
 			// IF BLACK JACK IS FALSE FOR PLAYER
 
 			System.out.println("     ---PLAYERS CARDS---");
-			System.out.println("--------------------------------------------------------");
 			// prints card names and values in players hand as a too string
-			getHandValue(handCheck = 'P');
+			System.out.println("Players Total: " + playersTotal);
 			System.out.println(blackJackPlayer.getPlayersHand());
-			System.out.println("--------------------------------------------------------");
 			System.out.println("");
-
 			System.out.println("      ---DEALERS CARDS---");
-			System.out.println("--------------------------------------------------------");
-			// System.out.println(dealersHand.getHandValue(dealersHand));
-			getHandValue(handCheck = 'D');
+			int dealersTotal = getHandTotal('D');
+			System.out.println("Dealers Total: " + dealersTotal);
 			System.out.print(blackJackDealer.getDealersHand());
 			System.out.println(" Second card is face down....");
-			System.out.println("--------------------------------------------------------");
 			System.out.println("");
 
 			// dealer draws fourth card
@@ -181,73 +187,78 @@ public class BlackJackApp {
 		boolean turn = true;
 		while (turn == true) {
 
-			int playersTotal = playersHand.getHandValue(playersHand);
+			int playersTotal = getHandTotal('P');
 
+			// only executes if players total is under 21
 			if (playersTotal < 21) {
-				char hitOrStay;
 
-				System.out.println();
-				System.out.println("============== MENU =============");
-				System.out.println("|     ---PLAYER'S TURN---       |");
-				System.out.println("|     --- BLACK  JACK ---       |");
-				System.out.println("|        Enter A to Hit         |");
-				System.out.println("|        Enter B to Stay        |");
-				System.out.println("|      Enter C to View Hand     |");
-				System.out.println("|    Enter D for Secret Menu    |");
-				System.out.println("|        Enter Q to Quit        |");
-				System.out.println("|                               |");
-				System.out.println("=================================");
-				System.out.println();
+				// if player successfully cheated, value will change to true, and player will
+				// stay
+				if (playerCheated == false) {
+					char hitOrStay;
 
-				hitOrStay = input.next().toUpperCase().charAt(0);
+					System.out.println();
+					System.out.println("============== MENU =============");
+					System.out.println("|     ---PLAYER'S TURN---       |");
+					System.out.println("|     --- BLACK  JACK ---       |");
+					System.out.println("|        Enter A to Hit         |");
+					System.out.println("|        Enter B to Stay        |");
+					System.out.println("|      Enter C to View Hand     |");
+					System.out.println("|    Enter D for Secret Menu    |");
+					System.out.println("|        Enter Q to Quit        |");
+					System.out.println("|                               |");
+					System.out.println("=================================");
+					System.out.println();
 
-				switch (hitOrStay) {
+					hitOrStay = input.next().toUpperCase().charAt(0);
 
-				case 'A':
-					gameCard = blackJackDealer.dealCard();
-					playersHand.addCardToHand(gameCard);
-					System.out.println("");
-					System.out.println("---PLAYER'S TOTAL---");
-					System.out.println("Player Hits");
-					System.out.println("New Card: " + gameCard);
-					// System.out.println("Player's new total: ");
-					// System.out.println(playersHand.getHandValue(playersHand));
-					getHandValue(handCheck = 'P');
-					System.out.println("");
-					break;
-				case 'B':
+					switch (hitOrStay) {
+
+					case 'A':
+						gameCard = blackJackDealer.dealCard();
+						playersHand.addCardToHand(gameCard);
+						System.out.println("");
+						System.out.println("Player Hits");
+						System.out.println("New Card: " + gameCard);
+						System.out.println(getHandTotal('P'));
+						System.out.println("");
+						break;
+					case 'B':
+						System.out.println("Player Has Chosen to Stay");
+						System.out.println("");
+						turn = false;
+						break;
+					case 'C':
+
+						System.out.println("       ---PLAYERS HAND---");
+						System.out.println(getHandTotal('P'));
+						System.out.println("Players Total: " + blackJackPlayer.getPlayersHand());
+						System.out.println("");
+						turn = true;
+						break;
+					case 'D':
+						// What could this be....
+						secretMenu();
+						break;
+					case 'Q':
+						System.out.println("Goodbye");
+						turn = false;
+						gameover = true;
+						input.close();
+						System.exit(0);
+						break;
+					default:
+						System.out.println("Invalid Option");
+						turn = true;
+						break;
+
+					}
+				} else if (playerCheated == true) {
 					System.out.println("Player Has Chosen to Stay");
 					System.out.println("");
 					turn = false;
-					break;
-				case 'C':
-
-					System.out.println("           ---Players Current Total---");
-					System.out.println("--------------------------------------------------------");
-					getHandValue(handCheck = 'P');
-					System.out.println(blackJackPlayer.getPlayersHand());
-					System.out.println("--------------------------------------------------------");
-					System.out.println("");
-					turn = true;
-					break;
-				case 'D':
-					// What could this be....
-					secretMenu();
-					break;
-				case 'Q':
-					System.out.println("Goodbye");
-					turn = false;
-					gameover = true;
-					input.close();
-					System.exit(0);
-					break;
-				default:
-					System.out.println("Invalid Option");
-					turn = true;
-					break;
 
 				}
-
 			} else {
 				turn = false;
 				gameover = true;
@@ -259,87 +270,102 @@ public class BlackJackApp {
 	// DEALERS TURN
 	public void dealersTurn() {
 
-		boolean turn = true;
-		while (turn == true) {
-			// get dealers current value
-			int dealersHandValue = dealersHand.getHandValue(dealersHand);
-			getHandValue(handCheck = 'D');
+		System.out.println("Dealers Turn");
+		int dealersHandTotal = 0;
+		boolean dealersTurn = true;
+		while (dealersTurn == true) {
 
-			System.out.println("---DEALERS TURN---");
-			// Dealer Logic
-			// Dealer will hit if value is under 17
-			// Dealer will pass if over 17
-			if (dealersHandValue < 17) {
-				System.out.println("Dealer Hits");
-				gameCard = blackJackDealer.dealCard();
-				dealersHand.addCardToHand(gameCard);
-				System.out.println("New Card: " + gameCard);
-				System.out.println("Dealers new total: ");
-				// System.out.println(dealersHand.getHandValue(dealersHand) + "\n");
-				getHandValue(handCheck = 'D');
-				System.out.println("");
-
-			} else if (dealersHandValue >= 17) {
-				System.out.println("Dealer choses to pass");
-				System.out.println("");
-				turn = false;
-				// dealersHand.getHandValue(dealersHand);
-			} else
-				System.out.println("Something is wrong....DEALER LOGIC");
-			gameover = true;
-			turn = false;
-			System.out.println("");
+			dealersHandTotal = blackJackDealer.getDealersHandTotal(dealersHand);
+			dealersTurn = blackJackDealer.dealersTurn(dealersHandTotal);
 		}
+
+		System.out.println("---Dealers Final Total---");
+		System.out.println(dealersHandTotal);
 
 	}
 
 	// Method to check hand values for both player and dealer
-	public void getHandValue(char handCheck) {
+	public void displayHandTotal(char handCheck) {
 
 		if (handCheck == 'P') {
-			System.out.print("Players Hand Total: ");
-			System.out.println(playersHand.getHandValue(playersHand));
+			if (playerCheated == false) {
+				System.out.print("Player's Hand Total: ");
 
+				int playersHandTotal = blackJackPlayer.getPlayersHandTotal(playersHand);
+				System.out.println("PLAYERS TOTAL: " + playersHandTotal);
+			}
+
+			else if (playerCheated == true) {
+				System.out.print("Player's Hand Total: ");
+				int playersHandTotal = playerCheatedTotal;
+				System.out.println("PLAYERS TOTAL: " + playersHandTotal);
+			}
 		} else if (handCheck == 'D') {
-			System.out.print("Dealers Hand Total: ");
-			System.out.println(dealersHand.getHandValue(dealersHand));
+			System.out.print("Dealer's Hand Total: ");
+
+			int dealersHandTotal = blackJackDealer.getDealersHandTotal(dealersHand);
+			System.out.println("DEALER'S TOTAL: " + dealersHandTotal);
+
 		} else {
-			System.out.println("Something happened....GET HAND TOTAL");
-			gameover = true;
+			System.out.println("GAME OVER");
+			System.out.println("Player has lost...");
+			System.out.println("Dealer has won");
+
 		}
 	}
 
-	// Check win/lose conditions after every round
-	public boolean gameConditions() {
+	public int getHandTotal(char handCheck) {
 
+		int handTotal = 0;
+
+		if (handCheck == 'P') {
+			if (playerCheated == false) {
+				handTotal = blackJackPlayer.getPlayersHandTotal(playersHand);
+			} else if (playerCheated == true) {
+				handTotal = playerCheatedTotal;
+			}
+			return handTotal;
+		} else if (handCheck == 'D') {
+
+			handTotal = blackJackDealer.getDealersHandTotal(dealersHand);
+
+			return handTotal;
+		} else {
+			return handTotal;
+		}
+
+	}
+
+	// Check win/lose conditions after every round
+	public boolean winLoseConditions() {
+
+		int dealersTotal = 0;
+		int playersTotal = 0;
 		// get the end game total for both hands
-		int dealersTotal = dealersHand.getHandValue(dealersHand);
-		int playersTotal = playersHand.getHandValue(playersHand);
+		if (playerCheated == false) {
+			dealersTotal = getHandTotal('D');
+			playersTotal = getHandTotal('P');
+		} else if (playerCheated == true) {
+			dealersTotal = getHandTotal('D');
+			playersTotal = playerCheatedTotal;
+			playerCheated = true;
+		}
 
 		// CHECKS FOR A TIE
 		if (dealersTotal == playersTotal) {
-			System.out.println("GAME OVER");
-			System.out.println("Game is a tie");
-			System.out.println("Dealer's total: " + dealersTotal);
-			System.out.println("Player's total: " + playersTotal);
+
+			gameTie(dealersTotal, playersTotal);
+
+			gameover = true;
+			return gameover;
+
 		} else {
 
 			// ---PLAYERS TOTAL--- 21
 			if (playersTotal == 21) {
 
-				System.out.println("GAME OVER");
-				System.out.println("Dealer has lost...");
-				System.out.println("Player has won!");
-				System.out.println("--------------------------------------------------------");
-				System.out.println("Dealers total: ");
-				// System.out.println(dealersHand.getHandValue(dealersHand));
-				getHandValue(handCheck = 'D');
-				System.out.println(blackJackDealer.getDealersHand());
-				System.out.println("\nPlayer's total: ");
-				getHandValue(handCheck = 'P');
-				System.out.println(blackJackPlayer.getPlayersHand());
-				System.out.println("--------------------------------------------------------");
-				System.out.println("Your vision fades and you wake up in your bed, was it just a dream?");
+				playerWon(dealersTotal, playersTotal);
+
 				gameover = true;
 				return gameover;
 
@@ -347,62 +373,33 @@ public class BlackJackApp {
 
 			// --DEALERS TOTAL = 21
 			if (dealersTotal == 21) {
-				System.out.println("GAME OVER");
-				System.out.println("Player has lost...");
-				System.out.println("Dealer has won");
-				System.out.println("--------------------------------------------------------");
-				System.out.println("Player's total: ");
-				getHandValue(handCheck = 'P');
-				System.out.println(blackJackPlayer.getPlayersHand());
-				System.out.println("--------------------------------------------------------");
-				System.out.println("\nDealers total: ");
-				getHandValue(handCheck = 'D');
-				System.out.println(blackJackDealer.getDealersHand());
-				System.out.println("--------------------------------------------------------");
-				System.out.println("You are banished to the shadow realm...");
+
+				dealerWon(dealersTotal, playersTotal);
+
 				gameover = true;
 				return gameover;
 			}
+
 			// BOTH DEALER AND PLAYER ARE UNDER 21
 			if ((dealersTotal < 21) && (playersTotal < 21)) {
-				// LOGIC THAT DETMINES WHO IS CLOSER TO 21
 
+				// LOGIC THAT DETMINES WHO IS CLOSER TO 21
 				// finds distance from 21 for both players total and dealers total
 				// determines winner based on who is closer
 				int dealersDistanceFrom21 = 21 - dealersTotal;
 				int playersDistanceFrom21 = 21 - playersTotal;
 
 				if (dealersDistanceFrom21 > playersDistanceFrom21) {
-					System.out.println("GAME OVER");
-					System.out.println("Dealer has lost...");
-					System.out.println("Player has won!");
-					System.out.println("--------------------------------------------------------");
-					System.out.println("Dealers total: ");
-					// System.out.println(dealersHand.getHandValue(dealersHand));
-					getHandValue(handCheck = 'D');
-					System.out.println(blackJackDealer.getDealersHand());
-					System.out.println("\nPlayer's total: ");
-					getHandValue(handCheck = 'P');
-					System.out.println(blackJackPlayer.getPlayersHand());
-					System.out.println("--------------------------------------------------------");
-					System.out.println("Your vision fades and you wake up in your bed, was it just a dream?");
+
+					playerWon(dealersTotal, playersTotal);
+
 					gameover = true;
 					return gameover;
+
 				} else if (dealersDistanceFrom21 < playersDistanceFrom21) {
-					System.out.println("GAME OVER");
-					System.out.println("Player has lost...");
-					System.out.println("Dealer has won");
-					System.out.println("--------------------------------------------------------");
-					System.out.println("Player's total: ");
-					// System.out.println(playersHand.getHandValue(playersHand));
-					getHandValue(handCheck = 'P');
-					System.out.println(blackJackPlayer.getPlayersHand());
-					System.out.println("--------------------------------------------------------");
-					System.out.println("\nDealers total: ");
-					getHandValue(handCheck = 'D');
-					System.out.println(blackJackDealer.getDealersHand());
-					System.out.println("--------------------------------------------------------");
-					System.out.println("You are banished to the shadow realm...");
+
+					dealerWon(dealersTotal, playersTotal);
+
 					gameover = true;
 					return gameover;
 				}
@@ -411,34 +408,18 @@ public class BlackJackApp {
 
 			// BOTH PLAYER AND DEALER ARE OVER 21
 			if (dealersTotal > 21 && playersTotal > 21) {
-				System.out.println("GAME OVER");
-				System.out.println("BOTH PLAYER AND DEALER LOSE");
-				System.out.println("--------------------------------------------------------");
-				System.out.println("Dealers total: ");
-				// System.out.println(dealersHand.getHandValue(dealersHand));
-				getHandValue(handCheck = 'D');
-				System.out.println(blackJackDealer.getDealersHand());
-				System.out.println("\nPlayer's total: ");
-				getHandValue(handCheck = 'P');
-				System.out.println(blackJackPlayer.getPlayersHand());
-				System.out.println("--------------------------------------------------------");
+
+				gameTie(dealersTotal, playersTotal);
+
 				gameover = true;
 				return gameover;
 			} else {
 				// DEALER OVER 21
 				// PLAYER WINS
 				if (dealersTotal > 21) {
-					System.out.println("GAME OVER");
-					System.out.println("Dealer has lost...");
-					System.out.println("Player has won");
-					System.out.println("--------------------------------------------------------");
-					System.out.println("Dealers total: ");
-					getHandValue(handCheck = 'D');
-					System.out.println(blackJackDealer.getDealersHand());
-					System.out.println("\nPlayer's total: ");
-					getHandValue(handCheck = 'P');
-					System.out.println(blackJackPlayer.getPlayersHand());
-					System.out.println("--------------------------------------------------------");
+
+					playerWon(dealersTotal, playersTotal);
+
 					gameover = true;
 					return gameover;
 
@@ -446,19 +427,9 @@ public class BlackJackApp {
 				// PLAYER OVER 21
 				// DEALER WINS
 				if (playersTotal > 21) {
-					System.out.println("GAME OVER");
-					System.out.println("Player has lost...");
-					System.out.println("Dealer has won");
-					System.out.println("--------------------------------------------------------");
-					System.out.println("Player's total: ");
-					getHandValue(handCheck = 'P');
-					System.out.println(blackJackPlayer.getPlayersHand());
-					System.out.println("--------------------------------------------------------");
-					System.out.println("\nDealers total: ");
-					getHandValue(handCheck = 'D');
-					System.out.println(blackJackDealer.getDealersHand());
-					System.out.println("--------------------------------------------------------");
-					System.out.println("You are banished to the shadow realm...");
+
+					dealerWon(dealersTotal, playersTotal);
+
 					gameover = true;
 					return gameover;
 				}
@@ -467,6 +438,58 @@ public class BlackJackApp {
 		}
 		gameover = true;
 		return gameover;
+
+	}
+
+	private void playersHand() {
+
+		if (playerCheated == false) {
+			System.out.println(blackJackPlayer.getPlayersHand());
+		} else if (playerCheated == true) {
+			System.out.println("Player Cheated.");
+		}
+
+	}
+
+	// DISPLAY WIN, LOSS, OR TIE
+	private void dealerWon(int dealersTotal, int playersTotal) {
+		System.out.println("GAME OVER");
+		System.out.println("Player has lost...");
+		System.out.println("Dealer has won\n");
+		displayHandTotal('P');
+		playersHand();
+		System.out.println("");
+		displayHandTotal('D');
+		System.out.println(blackJackDealer.getDealersHand());
+		System.out.println("");
+		System.out.println("You are banished to the shadow realm...\n" + "Was this some sort of test? Or Punishment?");
+	}
+
+	private void playerWon(int dealersTotal, int playersTotal) {
+		System.out.println("GAME OVER");
+		System.out.println("Player has Won!");
+		System.out.println("Dealer has lost...\n");
+		displayHandTotal('P');
+		playersHand();
+		System.out.println("");
+		displayHandTotal('D');
+		System.out.println(blackJackDealer.getDealersHand());
+		System.out.println("");
+		System.out.println("The room around you fades away...\n" + "You awaken in your bed, was it a dream? ");
+
+	}
+
+	private void gameTie(int dealersTotal, int playersTotal) {
+		// TODO Auto-generated method stub
+
+		displayHandTotal('P');
+		playersHand();
+		System.out.println("");
+		displayHandTotal('D');
+		System.out.println(blackJackDealer.getDealersHand());
+		System.out.println("");
+		System.out.println("The room around you fades away...\n" + "You awaken in your bed, was it a dream?\n "
+				+ "You somehow feel it will happen again someday...");
 
 	}
 
@@ -488,8 +511,11 @@ public class BlackJackApp {
 
 	}
 
+	// -------------------------------------------------SECRET
+	// GAME-------------------------------------------------
+
 	// ---SECRET MENU METHOD---
-	public String secretMenu() {
+	public void secretMenu() {
 
 		// Dispays Secret menu...
 		System.out.println();
@@ -505,7 +531,7 @@ public class BlackJackApp {
 		System.out.println("=================================");
 		System.out.println();
 
-		System.out.println("Please enter A, B, C, D, E, or Q ");
+		System.out.println("Please enter A, B, C, D, E, or Q\n");
 
 		// input for secret menu
 		char secretMenuSelection = input.next().toUpperCase().charAt(0);
@@ -541,55 +567,119 @@ public class BlackJackApp {
 			System.out.println("Invalid Option");
 		}
 
-		return null;
-
 	}
 
-	// add to subgame class
-	private String tryToLeave() {
+	private void tryToLeave() {
 		// TODO Auto-generated method stub
+
 		System.out.println(
 				"You decide to try leave, you turn from the card table.\n" + "The room is empty and unremarkable.\n"
 						+ "There is a door at the otherside of the room\n" + "and a window on the left.\n");
 
-		System.out.println("Please make a choice...\n" + "A for Door\n" + "B for the window\n");
+		System.out.println("Please make a choice...\n" + "A Choose the Door\n" + "B Choose the window\n");
 
 		char escapeOption = input.next().toUpperCase().charAt(0);
+		System.out.println("");
 
-		if (escapeOption == 'A') {
-			System.out.println("You chose the door, the wooden floor creaks as you walk...\n"
-					+ "The door isn't getting closer, regardless of how long you walk.\n"
-					+ "You turn arround, you are still where you started, next to the table with the Dealer... but how?\n");
-		} else if (escapeOption == 'B') {
+		if (playerFoundCrestOfMercury == false) {
+			if (escapeOption == 'A') {
+				System.out.println("You chose the door, the wooden floor creaks as you walk...\n"
+						+ "The door isn't getting closer, regardless of how long you walk.\n"
+						+ "You turn around, you are still where you started, next to the table with the Dealer... but how?\n");
+			} else if (escapeOption == 'B') {
+				System.out.println(
+						"You head to the window, it's already open. From the window you feel a cold draft, carrying with it a thick fog \n"
+								+ "You climb through and plunge into the depths below...\n"
+								+ "You wake up from a genlte slumber, you are standing in front of the desk with the dealer...\n");
+			}
+		} else if (playerFoundCrestOfMercury == true) {
+			if (escapeOption == 'A') {
+				System.out.println("You chose the door, the wooden floor creaks as you walk...\n"
+						+ "You open the door, and as soon you exit, you awaken in your bed.");
+
+				gameover = true;
+				System.exit(0);
+
+			} else if (escapeOption == 'B') {
+				System.out.println(
+						"You head to the window, it's already open. From the window you feel a cold draft, carrying with it a thick fog \n"
+								+ "You climb through and plunge into the depths below...\n"
+								+ "You wake up from a genlte slumber, you are safe in your bed...\n");
+
+				gameover = true;
+				System.exit(0);
+			}
+
+		}
+		
+	}
+
+	private int attemptToCheat() {
+		// TODO Auto-generated method stub
+
+		if ((playerFoundOldManCoin == false) && (playerFoundPrisonerCoin == false) && (playerFoundSnakeCoin == false)) {
+			System.out.println("Before you can finish the thought, you drift into a nostolgic slumber...");
+
+			System.out.println("You are banished to the shadow realm\n" + "Dealer wins...\n");
+			System.out.println("Game Over\n");
+
+			gameover = true;
+			System.exit(0);
+
+			return 0;
+
+		} else if ((playerFoundOldManCoin == true) || (playerFoundPrisonerCoin == true)
+				|| (playerFoundSnakeCoin == true)) {
+			System.out.println("You decide to cheat..." + "You manage to swap your cards " + "your new total is... ");
+
+			int intRandom = (int) (Math.random() * (21));
+			System.out.println(intRandom);
+
+			playerCheated = true;
+			playerCheatedTotal = intRandom;
+			return intRandom;
+		}
+		return 0;
+	}
+
+	private void speakWithDealer() {
+		// TODO Auto-generated method stub
+
+		if (playerFoundGamblingRecipetAndPictureOfMary == false) {
 			System.out.println(
-					"You head to the window, it's already open. From the window you feel a cold draft, carrying with it a thick fog \n"
-							+ "thats been filling the room. You climb through and plunge into the depths below...\n"
-							+ "You wake up from a genlte slumber, you are standing in front of the desk with the dealer...\n");
+					"As you try to speak, you find that you can't. Your mouth isn't bound, you just... can't....\n"
+							+ "You think the words, you think the action, but to no avail, you cannot speak...\n");
+
+			System.out.println(
+					"You look at the dealer, and you have trouble... understanding? It's right in front of you, \n"
+							+ "you can see them, but you are unable to comprehend... and as soon as as you look away, all details are forgotten.\n");
+			
 		}
 
-		return null;
-	}
+		else if (playerFoundGamblingRecipetAndPictureOfMary == true) {
 
-	private String attemptToCheat() {
-		// TODO Auto-generated method stub
-		System.out.println("Before you can finish the thought, you drift into a nostolgic slumber...");
+			System.out.println("You look at the dealer, the once distorted figure briefly resembled the women Mary from the picture.");
+			System.out.println("Get Ready to fight...");
 
-		System.out.println("You are banished to the shadow realm\n" + "Dealer wins...\n");
+			int playersTotal = getHandTotal('P');
+			int dealersTotal = getHandTotal('D');
+			if (playersTotal < dealersTotal) {
+				System.out.println("You beat the demonic incantation\n"
+						+ "The world fades and you wake in your bed. Was it a dream?");
+				System.out.println("");
+				gameover=true;
+				System.exit(0);
+			} else if (playersTotal > dealersTotal) {
+				System.out.println("You are defeated... " + "And banished to the shadow realm...");
+				System.out.println("");
+				System.out.println("Game Over\n");
+				
+				gameover=true;
+				System.exit(0);
+			}
+		}
+		
 
-		System.exit(0);
-		return null;
-	}
-
-	private String speakWithDealer() {
-		// TODO Auto-generated method stub
-		System.out
-				.println("As you try to speak, you find that you can't. Your mouth isn't bound, you just... can't....\n"
-						+ "You think the words, you think the action, but to no avail, you cannot speak...\n");
-
-		System.out
-				.println("You look at the dealer, and you have trouble... understanding? It's right in front of you, \n"
-						+ "you can see them, but you are unable to comprehend... and as soon as as you look away, all details are forgotten.\n");
-		return null;
 	}
 
 	// add to sub game class
@@ -607,8 +697,8 @@ public class BlackJackApp {
 		// The player will be able to examine the item when they check their pockets
 		// Having a specific item may change things tried before...
 		int intRandom = 15 + (int) (Math.random() * (91));
-		int playersHandTotal = playersHand.getHandValue(playersHand);
-		itemNumber = intRandom - playersHandTotal;
+		int playersTotal = getHandTotal('P');
+		itemNumber = intRandom - playersTotal;
 		System.out.println("");
 
 		// if player has not found an item yet...
@@ -626,6 +716,7 @@ public class BlackJackApp {
 				// gameItems.add(crestOfMercury);
 				foundItem = crestOfMercury;
 				playerFoundItem = true;
+				playerFoundCrestOfMercury = true;
 
 				// player finds the Gambling Receipt and Picture of Mary
 			} else if (itemNumber > 22 && itemNumber <= 52) {
@@ -640,6 +731,8 @@ public class BlackJackApp {
 				foundItem = gamblingRecipetAndPictureOfMary;
 				playerFoundItem = true;
 
+				playerFoundGamblingRecipetAndPictureOfMary = false;
+
 			} // player finds the Coin (Old Man)
 			else if (itemNumber > 52 && itemNumber <= 57) {
 				System.out.println("You look under the table....\n" + "You find the Coin (Old Man).");
@@ -649,6 +742,7 @@ public class BlackJackApp {
 				Items coinOldMan = new Items(itemName, itemDescription, itemNumber);
 				foundItem = coinOldMan;
 				playerFoundItem = true;
+				playerFoundOldManCoin = false;
 
 			} // player finds the Coin (Prisoner)
 			else if (itemNumber > 57 && itemNumber <= 62) {
@@ -660,6 +754,7 @@ public class BlackJackApp {
 				Items coinPrisoner = new Items(itemName, itemDescription, itemNumber);
 				foundItem = coinPrisoner;
 				playerFoundItem = true;
+				playerFoundPrisonerCoin = false;
 
 				// gameItems.add(coinPrisoner);
 			} // player finds the Coin (Snake)
@@ -671,6 +766,7 @@ public class BlackJackApp {
 				Items coinSnake = new Items(itemName, itemDescription, itemNumber);
 				foundItem = coinSnake;
 				playerFoundItem = true;
+				playerFoundSnakeCoin = false;
 
 			}
 			// Player does't find anything
@@ -683,17 +779,11 @@ public class BlackJackApp {
 			System.out.println("You look under the table again...");
 			System.out.println("But there is nothing there.\n");
 		}
-		//
-		// 1-8 Crest of Mercury--You can Move to the Door or Window
-		// 8-20 Receipt and Picture of Mary--You can Move
-		// 20-22 Coin (Old Man)
-		// 22-24 Coin (Prisoner)
-		// 24-26 Coin (Snake)
 
 	}
 
 	public void deckSize() {
-		System.out.println("Cards remaing in deck..." + deck.checkDeckSize() + "\n");
+		System.out.println("Cards remaing in deck..." + dealersDeck.checkDeckSize() + "\n");
 
 	}
 

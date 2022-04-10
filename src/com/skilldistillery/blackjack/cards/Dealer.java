@@ -5,29 +5,32 @@ import java.util.List;
 
 public class Dealer {
 
-	// --DEALER ATTRIBUTES---
-	// dealers has a deck
-	// dealer has a hand
-	// dealer has cards
+	// instance variables
+	private BlackJackHand blackJackHand = new BlackJackHand();
 
-	// ---Field variables---
-	private List<Card> cards;
+	// ---Object variables---
+	// Every Dealer has a Hand
+	private List<Card> dealersCards;
 
-	// -----INSTANCES------
-	// instance of BlackJack Hand
-	// should it be hand??
+	// Dealer's Default Hand
 	private Hand dealersHand;
 
-	// Dealer Deck for game
+	// Dealer's Deck
 	private Deck dealersDeck;
 
-	// cards for game
+	// Dealer's Card
 	private Card gameCard;
 
 	// ---Constructors---
 	// Default constructor
-	public Dealer() {
 
+	public Dealer() {
+		dealersCards = createDealersHand();
+	}
+
+	public List<Card> createDealersHand() {
+		List<Card> dealersHand = new ArrayList<>();
+		return dealersHand;
 	}
 
 	// Primary Constructor
@@ -35,12 +38,18 @@ public class Dealer {
 
 		this.dealersHand = dealersHand;
 		this.dealersDeck = dealersDeck;
-		// this.gameCard = gameCard;
+	}
+
+	public Dealer(Hand dealersHand, Deck dealersDeck, Card gameCard) {
+
+		this.dealersHand = dealersHand;
+		this.dealersDeck = dealersDeck;
+		this.gameCard = gameCard;
 	}
 
 	// ---Methods--
 
-	// Make the card deck
+	// DEALERS CAN MAKE THEIR OWN DECK IF NEEDED
 	public Deck makeDeck(Deck dealersDeck) {
 
 		dealersDeck.createDeck();
@@ -48,24 +57,45 @@ public class Dealer {
 
 	}
 
-	// draw cards
+	// DEAL CARD
 	public Card dealCard() {
-		// List<Card> draw = new ArrayList<>();
-		// Card drawnCard=new Card();
-		// int totalValue=0;
-		// for (int i = 0; i < 2; i++) {
-		Card c = dealersDeck.dealCard();
-		return c;
+		Card dealCard = dealersDeck.dealCard();
+		return dealCard;
+	}
+
+	// GET HAND TOTAL FOR BLACK JACK
+	public int getDealersHandTotal(BlackJackHand dealersHand) {
+
+		int handTotal = blackJackHand.getHandTotal(dealersHand);
+
+		return handTotal;
+
 	}
 
 	// ---DEALER LOGIC---
-	public void dealersTurn() {
-		// Needs BlackJack Hand
-		// needs Card in hand
-		// Needs hand value
-		// If hand value is more than 17, pass
-		// If hand value is less that 17, hit
+	// FOR BLACK JACK
+	public boolean dealersTurn(int dealersHandTotal) {
 
+		boolean dealersTurn = true;
+
+		// Dealer Logic
+		// Dealer will hit if handTotal is under 17
+		// Dealer will pass if handTotal is over 17
+		if (dealersHandTotal < 17) {
+			System.out.println("Dealer Hits");
+			gameCard = dealCard();
+			dealersHand.addCardToHand(gameCard);
+			System.out.println("New Card: " + gameCard);
+			dealersTurn = true;
+			return dealersTurn;
+
+		} else if (dealersHandTotal >= 17) {
+			System.out.println("Dealer choses to pass");
+			System.out.println("");
+			dealersTurn = false;
+			return dealersTurn;
+		}
+		return dealersTurn;
 	}
 
 	// ---Getters and Setters---

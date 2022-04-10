@@ -37,12 +37,12 @@ public class BlackJackHand extends Hand {
 	}
 
 	// FIND HAND TOTAL
-	public int getHandValue(BlackJackHand handValue) {
+	public int getHandTotal(BlackJackHand handTotal) {
 		// Iterate through cards in hand.
 		// Adding the total amount
 		// WORKS
 		int totalValue = 0;
-		for (Card card : handValue.getCards()) {
+		for (Card card : handTotal.getCards()) {
 
 			int value = card.getValue();
 			totalValue += card.getValue();
