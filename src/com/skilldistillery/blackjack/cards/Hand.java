@@ -8,23 +8,24 @@ import java.util.List;
 
 public abstract class Hand {
 
-	// instance variable
+	// Instance variable
+	// EVERY HAND HAS A LIST OF CARDS
 	protected List<Card> cards;
 
 	// ---CONSTRUCTORS---
+
 	// Default constructor
 	public Hand() {
-
+		cards = createHand();
 	}
-
-	// Primary Constructor
-	public Hand(List<Card> cards) {
-		super();
-		this.cards = cards;
+	
+	public List <Card> createHand(){
+		List<Card> Hand=new ArrayList<>();
+		return Hand;
 	}
 
 	// ---METHODS---
-	public void addCard(Card drawnCard) {
+	public void addCardToHand(Card drawnCard) {
 		cards.add(drawnCard);
 
 	}
@@ -35,23 +36,16 @@ public abstract class Hand {
 
 	}
 
-	// Abstract method
-	// no method body
-	// public abstract int getHandValue();
-
+	// FIND HAND TOTAL
 	public int getHandValue(List<Card> cardHand) {
 		// Iterate through cards in hand.
 		// Adding the total amount
 
 		int totalValue = 0;
 		for (Card card : cardHand) {
-			
+
 			int value = card.getValue();
 			totalValue += card.getValue();
-			
-//			System.out.println("IN METHOD");
-//			System.out.println("Card Value: "+value);
-//			System.out.println("Cards Value: "+totalValue);
 
 		}
 		return totalValue;

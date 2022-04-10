@@ -28,10 +28,6 @@ import java.util.List;
 //TODO SHUFFLE DECK OPTION
 //TODO AMOUNT OF CARDS IN DECK
 
-//---BLACK JACK RULES---
-//TODO ACE IS EITHER 1 OR 11
-
-
 //-----FOR SUB GAME-----
 //TODO Implement item abilities (PROBABLY IN ITEM CLASS)
 //TODO Implement effect items will have on actions (PROBABLY IN SUB GAME CLASS)
@@ -87,11 +83,10 @@ public class BlackJackApp {
 		app.run();
 	}
 
+	// RUN METHOD
 	public void run() {
 
 		while (gameover == false) {
-
-			int gameCounter = 1;
 
 			System.out.println("Do you want to player a game...\n");
 			firstTurn();
@@ -108,28 +103,28 @@ public class BlackJackApp {
 				// check win conditions
 				gameConditions();
 			}
-			// keeps total of games played
-			gameCounter++;
 		}
 	}
 
 	// first turn
 	public void firstTurn() {
+
 		// Dealer draws three cards
 		// Only dealer can draw cards from the deck
 
 		// First card to added to players hand
 		gameCard = blackJackDealer.dealCard();
-		playersHand.addCard(gameCard);
+		playersHand.addCardToHand(gameCard);
 
 		// second card is added to dealers hand
 		gameCard = blackJackDealer.dealCard();
-		dealersHand.addCard(gameCard);
+		dealersHand.addCardToHand(gameCard);
 
-//		//third card is added to players hand
+		// third card is added to players hand
 		gameCard = blackJackDealer.dealCard();
-		playersHand.addCard(gameCard);
+		playersHand.addCardToHand(gameCard);
 
+		// add to subgame class
 		System.out.println("Dealer Shuffles deck with a technique you can't quite understand...\n"
 				+ "They deal two cards, face up in front of you.\n"
 				+ "You look up, and see him grinning... An ominous feeling envelops you.\n"
@@ -168,13 +163,14 @@ public class BlackJackApp {
 			// the card is placed face down.
 			// NOT VISIBLE TO PLAYER TILL DEALERS TURN
 			gameCard = blackJackDealer.dealCard();
-			dealersHand.addCard(gameCard);
+			dealersHand.addCardToHand(gameCard);
 		}
 	}
 
 	// PLAYERS TURN
 	public void playersTurn() {
-
+		// add to subgame class
+		// call with method
 		System.out.println("It's your turn... The dealer doesnt say anything, but you know they are waitng\n"
 				+ "You can't quite remember where you are, or how you arrived here\n"
 				+ "And just as you think you remember, it slips away...\n");
@@ -209,7 +205,7 @@ public class BlackJackApp {
 
 				case 'A':
 					gameCard = blackJackDealer.dealCard();
-					playersHand.addCard(gameCard);
+					playersHand.addCardToHand(gameCard);
 					System.out.println("");
 					System.out.println("---PLAYER'S TOTAL---");
 					System.out.println("Player Hits");
@@ -276,7 +272,7 @@ public class BlackJackApp {
 			if (dealersHandValue < 17) {
 				System.out.println("Dealer Hits");
 				gameCard = blackJackDealer.dealCard();
-				dealersHand.addCard(gameCard);
+				dealersHand.addCardToHand(gameCard);
 				System.out.println("New Card: " + gameCard);
 				System.out.println("Dealers new total: ");
 				// System.out.println(dealersHand.getHandValue(dealersHand) + "\n");
@@ -328,7 +324,7 @@ public class BlackJackApp {
 			System.out.println("Player's total: " + playersTotal);
 		} else {
 
-			// ---PLAYERS TOTAL == 21
+			// ---PLAYERS TOTAL--- 21
 			if (playersTotal == 21) {
 
 				System.out.println("GAME OVER");
@@ -549,6 +545,7 @@ public class BlackJackApp {
 
 	}
 
+	// add to subgame class
 	private String tryToLeave() {
 		// TODO Auto-generated method stub
 		System.out.println(
@@ -595,6 +592,7 @@ public class BlackJackApp {
 		return null;
 	}
 
+	// add to sub game class
 	private void lookUnderTable() {
 
 		// The item found is determined by generating a random number between 22 and 91,

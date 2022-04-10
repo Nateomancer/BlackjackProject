@@ -3,35 +3,40 @@ package com.skilldistillery.blackjack.cards;
 import java.util.ArrayList;
 import java.util.List;
 
-//Blackjack Hand Has a List of Cards
-
 public class BlackJackHand extends Hand {
 
-	// field variables
-	// list of cards
-	List<Card> cards = new ArrayList<>();
+	// Instance Variable
+	// EVERY HAND HAS A LIST OF CARDS
+	private List<Card> cards;
 
 	// ---CONSTRUCTORS---
 
 	// Default constructor
-	public BlackJackHand() {
-		// TODO Auto-generated constructor stub
-	}
-
 	// Primary constructor
-	// inherited from parent class, hand
-	public BlackJackHand(List<Card> cards) {
-		super(cards);
-		this.cards = cards;
+	public BlackJackHand() {
+		//super(cards);
+	
+		cards = createBlackJackHand();
 	}
 
+	//Create the hand of cards for blackjack
+	public List<Card> createBlackJackHand(){
+		List<Card> blackJackHand=new ArrayList<>();
+		return blackJackHand;
+	}
+	
 	// ---METHODS---
 	// Black Jack addCard to hand
-	public void addCard(Card drawnCard) {
+	public void addCardToHand(Card drawnCard) {
 		cards.add(drawnCard);
 	}
 
-	// Get total value of hand
+	// Clears the hand
+	public void clear() {
+		cards.clear();
+	}
+
+	// FIND HAND TOTAL
 	public int getHandValue(BlackJackHand handValue) {
 		// Iterate through cards in hand.
 		// Adding the total amount
@@ -47,35 +52,21 @@ public class BlackJackHand extends Hand {
 
 	}
 
-	// new method IGNORE FOR NOW
-//	public void getHandInfo(BlackJackHand handValue) {
-//		int totalValue = 0;
-//		for (Card card : handValue.getCards()) {
-//
-//			int value = card.getValue();
-//			String name = card.getName();
-//			System.out.println("---------------------------------");
-//			System.out.println("Card Name: " + name + " Card Value: " + value);
-//			totalValue += card.getValue();
-//		}
-//
-//		System.out.println("Hand Total: " + totalValue);
-//		System.out.println("---------------------------------");
-//
-//	}
-
-	// 21
+	// FINDS IF HAND IS A BLACK JACK
+	// 21 ON FIRST TURN
 	public boolean isBlackjack() {
 		return false;
 
 	}
 
-	// over 21
+	// FINDS IF HAND IS A BUST
+	// HAND TOTAL GOES OVER 21
 	public boolean isBust() {
 		return false;
 
 	}
 
+	// GETTER AND SETTERS
 	public List<Card> getCards() {
 		return cards;
 	}
@@ -84,17 +75,10 @@ public class BlackJackHand extends Hand {
 		this.cards = cards;
 	}
 
+	// TOSTRING
 	@Override
 	public String toString() {
 		return "Cards in hand: " + cards;
 	}
-//Old inherited method from abstract parent class hand
-//abstract method get HandValue
-//??????????????
-//	@Override
-//	public int getHandValue() {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
 
 }

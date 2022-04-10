@@ -19,7 +19,7 @@ import java.util.List;
 //for player
 public class Player {
 
-	// list of cards???
+
 	private List<Card> playersCards;
 
 	// instance of players Hand
@@ -35,7 +35,6 @@ public class Player {
 
 //Primary Constructor
 	public Player(Hand playersHand) {
-		super();
 		this.playersHand = playersHand;
 
 	}
