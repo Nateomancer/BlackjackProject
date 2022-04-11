@@ -1,50 +1,16 @@
 package com.skilldistillery.blackjack;
 
-//import java.util.ArrayList;
-//import java.util.List;
 import java.util.Scanner;
-//import com.skilldistillery.blackjack.cards.Hand;
 import com.skilldistillery.blackjack.cards.Items;
 import com.skilldistillery.blackjack.cards.BlackJackHand;
 import com.skilldistillery.blackjack.cards.Dealer;
 import com.skilldistillery.blackjack.cards.Deck;
 import com.skilldistillery.blackjack.cards.Card;
 import com.skilldistillery.blackjack.cards.Player;
-//import java.util.ArrayList;
-//import java.util.List;
-
-//---CORE PROGRAM FOR ASSIGNMENT---
-//TODO BUILD DECK
-//WHAT DECK IS BEING USED, DEALERS DECK OR DECKS DECK?
-//AFTER TODAY I THINK ThEY ARE THE SAME
-//TODO CLEAN UP COMMENTS/ OLD CODE
-//TODO AN OPTION TO PLAY AGAIN
-//TODO BETTER WAY T0 CREATE A BLACK JACK HAND FOR PLAYER AND DEALER
-//TODO BETTER WAY TO CHECK HAND
-//WHICH METHOD IS BEING CALLED, HAND MEHTOD OR BLACK JACK HAND??
-//WHICH HAND IS BEING INSTANTIATED?? PROBABLY BLACKJACK
-//IMPORVE ON THE ABSTRACTION AND THE INCAPSULATION
-//REMMEBER OOP PRINCIPLES
-//TODO SHUFFLE DECK OPTION
-//TODO AMOUNT OF CARDS IN DECK
-
-//-----FOR SUB GAME-----
-//TODO Implement item abilities (PROBABLY IN ITEM CLASS)
-//TODO Implement effect items will have on actions (PROBABLY IN SUB GAME CLASS)
-//TODO Implement battle mode (PROBABLY SUB GAME CLASS
-//TODO MAKE CODE DRY (REMOVE OLD CODE, IMPLEMENT NEW METHODS FOR REPRETED CODE)
-//TODO ADD FLAVOR COMMENTS TO NEW CLASS
-//TODO ADD SUB GAME TO DIFFERENT CLASS
-//TODO GO OVER HAND ABSTRACT METHOD
-//TODO GO OVER BLACK JACK HAND METHOD
-//TODO GO OVER PLAYER  CLASS/METHODS
-//TODO GO OVER DEALER CLASS/METHODS
 
 public class BlackJackApp {
 
-	// handCheck
-	// DO I NEED???
-	private char handCheck;
+	// private char handCheck;
 
 	// --INSTANCE VARIABLES---
 	private Card gameCard;
@@ -54,7 +20,7 @@ public class BlackJackApp {
 	private Items foundItem;
 	private boolean playerFoundItem = false;
 	private boolean playerFoundCrestOfMercury = false;
- 	private boolean playerFoundGamblingRecipetAndPictureOfMary = false;
+	private boolean playerFoundGamblingRecipetAndPictureOfMary = false;
 	private boolean playerFoundOldManCoin = false;
 	private boolean playerFoundPrisonerCoin = false;
 	private boolean playerFoundSnakeCoin = false;
@@ -553,15 +519,15 @@ public class BlackJackApp {
 			lookUnderTable();
 			break;
 		case 'E':
-			//check pocket
-			if (playerFoundItem ==true) {
+			// check pocket
+			if (playerFoundItem == true) {
 				System.out.println(foundItem.toString());
 				System.out.println("");
 				System.out.println("What is this? Why was it there...");
 				System.out.println("Maybe it's for something.\n");
-			} else if (playerFoundItem==false){
+			} else if (playerFoundItem == false) {
 				System.out.println("You find nothing in your pocket.");
-			}else {
+			} else {
 				System.out.println("You find nothing in your pocket.");
 			}
 			break;
@@ -616,7 +582,7 @@ public class BlackJackApp {
 			}
 
 		}
-		
+
 	}
 
 	private int attemptToCheat() {
@@ -658,12 +624,13 @@ public class BlackJackApp {
 			System.out.println(
 					"You look at the dealer, and you have trouble... understanding? It's right in front of you, \n"
 							+ "you can see them, but you are unable to comprehend... and as soon as as you look away, all details are forgotten.\n");
-			
+
 		}
 
 		else if (playerFoundGamblingRecipetAndPictureOfMary == true) {
 
-			System.out.println("You look at the dealer, the once distorted figure briefly resembled the women Mary from the picture.");
+			System.out.println(
+					"You look at the dealer, the once distorted figure briefly resembled the women Mary from the picture.");
 			System.out.println("Get Ready to fight...");
 
 			int playersTotal = getHandTotal('P');
@@ -672,18 +639,17 @@ public class BlackJackApp {
 				System.out.println("You beat the demonic incantation\n"
 						+ "The world fades and you wake in your bed. Was it a dream?");
 				System.out.println("");
-				gameover=true;
+				gameover = true;
 				System.exit(0);
 			} else if (playersTotal > dealersTotal) {
 				System.out.println("You are defeated... " + "And banished to the shadow realm...");
 				System.out.println("");
 				System.out.println("Game Over\n");
-				
-				gameover=true;
+
+				gameover = true;
 				System.exit(0);
 			}
 		}
-		
 
 	}
 
@@ -779,7 +745,7 @@ public class BlackJackApp {
 				System.out.println("Nothing...\n");
 				playerFoundItem = false;
 			}
-			//player has already found an item
+			// player has already found an item
 		} else if (playerFoundItem = true) {
 			System.out.println("You look under the table again...");
 			System.out.println("But there is nothing there.\n");
